@@ -12,23 +12,19 @@ public class OrderService {
 
     public void syncBookOrders()
     {
-        List<Order> orders = this.getOrders();
+        List<Order> orders = this.GetOrders();
 
         // only get orders of book
         List<Order> ordersOfBook = orders.stream().filter(x -> x.getType().equals("Book")).collect(toList());
 
-        BookDao bookDao = getBookDao();
+        BookDao bookDao = new BookDao();
         for (Order order : ordersOfBook)
         {
             bookDao.insert(order);
         }
     }
 
-    protected BookDao getBookDao() {
-        return new BookDao();
-    }
-
-    protected List<Order> getOrders()
+    private List<Order> GetOrders()
     {
         // parse csv file to get orders
         List<Order> result = new ArrayList<>();
@@ -48,7 +44,7 @@ public class OrderService {
                 if (rowCount > 1) {
                     String[] line = content.trim().split(",");
 
-                    result.add(this.mapping(line));
+                    result.add(this.Mapping(line));
                 }
             }
         }
@@ -56,7 +52,7 @@ public class OrderService {
         return result;
     }
 
-    private Order mapping(String[] line)
+    private Order Mapping(String[] line)
     {
         Order result = new Order(){{
             setProductName(line[0]);
